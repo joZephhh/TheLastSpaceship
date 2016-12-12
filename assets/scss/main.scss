@@ -1,0 +1,63 @@
+*
+{
+	margin:0;
+	padding:0;
+}
+html,body {
+    width: 100%;
+    height: 100%;
+}
+body {
+    background:black;
+    overflow: hidden;
+    .landing-page {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        .landing-page-content {
+            text-align: center;
+            img {
+                width: 200px;
+                height: auto;
+                animation-name: floatShip;
+                animation-duration: 2s;
+                animation-iteration-count: infinite;
+                will-change:transform;
+                animation-direction: alternate;
+            }
+
+            h1 {
+                font-size: 120px;
+                color: white;
+                font-family: cursive;
+            }
+            .ld_start_button {
+                width: 220px;
+                height: 60px;
+                background: #e74c3c;
+                margin: 10px auto;
+                border-radius: 10px;
+                text-align: center;
+                font-family: sans-serif;
+                span {
+                    color:white;
+                    line-height: 60px;
+                }
+            }
+        }
+    }
+}
+
+@keyframes floatShip {
+    0% {
+        transform: translateY(0px);
+    }
+    100% {
+        transform: translateY(-50px);
+    }
+}
