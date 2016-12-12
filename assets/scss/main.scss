@@ -1,63 +1,311 @@
-*
-{
-	margin:0;
-	padding:0;
+* {
+    margin: 0;
+    padding: 0;
 }
-html,body {
+
+// fullpage game
+body,
+html {
     width: 100%;
     height: 100%;
 }
+
+// background sky
 body {
-    background:black;
+    background: linear-gradient( to top, #4b6cb7 ,#000000);
     overflow: hidden;
-    .landing-page {
+
+//container
+    .container-game {
         position: absolute;
-        top: 0px;
-        left: 0px;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        .landing-page-content {
-            text-align: center;
-            img {
-                width: 200px;
-                height: auto;
-                animation-name: floatShip;
-                animation-duration: 2s;
-                animation-iteration-count: infinite;
-                will-change:transform;
-                animation-direction: alternate;
-            }
+        .colorSpaceship {
+            background: white;
+        }
+// welcome page before start the game
+        .landing-page {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
 
-            h1 {
-                font-size: 120px;
-                color: white;
-                font-family: cursive;
-            }
-            .ld_start_button {
-                width: 220px;
-                height: 60px;
-                background: #e74c3c;
-                margin: 10px auto;
-                border-radius: 10px;
+            .landing-page-content {
                 text-align: center;
-                font-family: sans-serif;
-                span {
-                    color:white;
-                    line-height: 60px;
+                will-change: opacity;
+                transition-duration: 1s;
+
+// spaceship presentation
+                .lg-spaceship {
+                    width: auto;
+                    height: 200px;
+                    animation-name: ldFloatShip;
+                    animation-duration: 1s;
+                    animation-iteration-count: infinite;
+                    will-change: transform;
+                    animation-direction: alternate;
+                }
+
+                h1 {
+                    font-size: 90px;
+                    color: white;
+                    font-family: 'Nova Mono', monospace;
+                }
+
+                a {
+                    text-decoration: none;
+
+// button who trigger the start
+                    .ld-start-button {
+                        width: 220px;
+                        height: 60px;
+                        background: #e74c3c;
+                        margin: 40px auto;
+                        border-radius: 10px;
+                        text-align: center;
+                        font-family: sans-serif;
+
+                        span {
+                            color: white;
+                            line-height: 60px;
+                        }
+
+                        &:hover {
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+// earth at the bottom
+                .ld-earth {
+                    position: absolute;
+                    width: 200px;
+                    height: 200px;
+                    margin: 0 auto;
+                    bottom: -80px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    animation-name: ldEarth;
+                    animation-duration: 48s;
+                    will-change: transform;
+
+                    img {
+                        width: 100%;
+                        height: auto;
+                    }
                 }
             }
+
+// when I click on .ld-start-button and I add launch to .landing-page
+            &.launch {
+                .landing-page-content {
+                    .lg-spaceship {
+                        animation-name: ldFloatShipLaunch;
+                        animation-duration: 1s;
+                        animation-iteration-count: 1;
+                        animation-fill-mode: forwards;
+                        will-change: transform;
+                        animation-direction: normal;
+                    }
+                    opacity: 0;
+                }
+            }
+        }
+
+// game where verything happens
+        .game {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+// the spaceship
+            .game-spaceship {
+                width: 300px;
+                height: auto;
+                margin: 0 auto;
+                text-align: center;
+                position: relative;
+                will-change: transform;
+                transform: translateY(200%);
+                transition-property: transform;
+                transition-duration: 1s;
+
+                svg {
+                    width: calc(100%/2);
+                    height: auto;
+                    cursor: pointer;
+
+                }
+
+// all data arround our spaceship
+                .game-data {
+                    position: absolute;
+                    display: flex;
+                    flex-direction: row-reverse;
+                    justify-content: space-between;
+                    align-items: center;
+                    color: #ececec;
+                    height: 100px;
+
+
+// data about spaceship speed
+                    &.game-data-speed {
+                        width: 200px;
+                        .game-data-stroke {
+                            width: 100px;
+                        }
+                    }
+
+// data about spaceship level of gas
+                    &.game-data-tank {
+                        width: 400px;
+                        .game-data-stroke {
+                            width: 300px;
+                        }
+                    }
+
+// data about user money
+                    &.game-data-money {
+                        width: 240px;
+                        flex-direction: row;
+
+                        .game-data-stroke {
+                            width: 130px;
+                        }
+                    }
+
+// general properties to stroke
+                    .game-data-stroke {
+                        will-change: transform;
+                        transform: scaleX(0);
+                        transition-property: transform;
+                        transition-duration: 0.3s;
+                        transition-delay: 0.8s;
+                        height: 5px;
+                        background: #ececec;
+                    }
+
+// general properties to infos
+                    .game-data-info {
+                        font-family: sans-serif;
+                        will-change: transform;
+                        transform: opacity;
+                        opacity: 0;
+                        transition-property: opacity;
+                        transition-duration: 0.5s;
+                        transition-delay: 1.1s;
+
+                        span {
+                            font-weight: bold;
+                            color: white;
+                            font-size: 15px;
+                            &:first-of-type {
+                                font-family: 'Nova Mono', monospace;
+                                font-size: 35px;
+                            }
+                        }
+
+// for data who are on the right side
+                        &.game-data-info-r {
+                            padding-right: 30px;
+                            text-align: right;
+                        }
+// for data who are on the left side
+                        &.game-data-info-l {
+                            padding-left: 30px;
+                            text-align: left;
+                        }
+                    }
+                }
+                &.spaceship-lvl-1 {
+                    .game-data-speed {
+                        top: -10px;
+                        right: 65%;
+                    }
+                    .game-data-tank {
+                        top: 80px;
+                        right: 65%;
+                    }
+                    .game-data-money {
+                        top: 50px;
+                        left: 65%;
+                    }
+                }
+            }
+            .game-total-data {
+                margin-top: 100px;
+                text-align: center;
+                font-size: 35px;
+                color: white;
+                font-family: 'Nova Mono', monospace;
+                will-change:opacity;
+                transition: opacity;
+                transition-duration: 0.5s;
+                transition-delay: 1s;
+                opacity: 0;
+                span:first-child {
+                    font-weight: bolder;
+                    font-size: 45px;
+                }
+                span:last-child {
+                    font-weight: lighter;
+                }
+            }
+// when I click on .ld-start-button and I add .launched to .game
+            &.launched {
+                .game-spaceship {
+                    transform: translateY(0px);
+
+                    .game-data {
+                        .game-data-stroke {
+                            transform: scale(1);
+                        }
+
+                        .game-data-info {
+                            opacity: 1;
+                        }
+                    }
+                }
+                .game-total-data {
+                    opacity: 1;
+                }
+            }
+
         }
     }
 }
 
-@keyframes floatShip {
+
+// ANIMATIONS
+//Launch page
+// Spaceship
+@keyframes ldFloatShip {
     0% {
         transform: translateY(0px);
     }
+
     100% {
-        transform: translateY(-50px);
+        transform: translateY(-30px);
+    }
+}
+@keyframes ldEarth {
+    0% {
+        transform: translate(-50%, 0%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, 100%) rotate(360deg);
+    }
+}
+
+// when I click on .ld-start-button and I add .launch to .landing-page
+@keyframes ldFloatShipLaunch {
+    100% {
+        transform: translateY(-300%);
     }
 }
