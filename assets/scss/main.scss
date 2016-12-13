@@ -12,7 +12,6 @@ html {
 
 // background sky
 body {
-    background: linear-gradient( to top, #4b6cb7 ,#000000);
     overflow: hidden;
 
 //container
@@ -125,7 +124,18 @@ body {
             display: flex;
             flex-direction: column;
             justify-content: center;
-
+            .game-progression {
+                font-family: 'Nova Mono', monospace;
+                font-size: 24px;
+                color: #ececec;
+                text-align: center;
+                margin-bottom: 100px;
+                will-change: opacity;
+                opacity: 0;
+                transition-property: opacity;
+                transition-duration: 0.5s;
+                transition-delay: 1s;
+            }
 // the spaceship
             .game-spaceship {
                 width: 300px;
@@ -134,7 +144,7 @@ body {
                 text-align: center;
                 position: relative;
                 will-change: transform;
-                transform: translateY(200%);
+                transform: translateY(400%);
                 transition-property: transform;
                 transition-duration: 1s;
 
@@ -211,13 +221,13 @@ body {
                                 font-family: 'Nova Mono', monospace;
                                 font-size: 35px;
                                 font-weight: bold;
-                                &.unit-sec-nb {
-                                    position: relative;
+                                position: relative;
+
                                     &::after {
                                         display: none;
                                     }
                                     &.unit-max {
-
+                                        color: orange;
                                         &::after {
                                             display: block;
                                             content: "MAX";
@@ -226,7 +236,7 @@ body {
                                             top: 0px;
                                             left: 120%;
                                         }
-                                    }
+
 
                                 }
                             }
@@ -295,11 +305,46 @@ body {
                         }
                     }
                 }
+                .game-progression {
+                    opacity: 1;
+
+                }
                 .game-total-data {
                     opacity: 1;
                 }
             }
+            &.changingGalaxy {
+                .game-progression {
+                    opacity: 0;
+                    transition-delay: 0.3s;
+                }
+                .game-spaceship {
+                    transform: translateY(-400%);
+                    transition-delay: 1s;
+                    .game-data {
+                        .game-data-info {
+                            transition-delay: 0.3s;
+                            opacity: 0;
+                        }
+                        .game-data-stroke {
+                            transform: scaleX(0);
+                            transition-delay: 0.5s
+                        }
 
+                    }
+
+                }
+                .game-total-data {
+                    opacity: 0;
+                    transition-delay: 0.3s
+                }
+            }
+            &.changingGalaxy-2 {
+                opacity: 0;
+                .game-spaceship{
+                transform: translateY(500%);
+            }
+            }
         }
     }
 }

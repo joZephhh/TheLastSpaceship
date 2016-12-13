@@ -1,10 +1,10 @@
 console.log("script linked");
 var tls_dtb;
-if(localStorage.getItem('tls_database')) {
-	 tls_dtb = JSON.parse(localStorage.getItem('tls_database'));
+if (localStorage.getItem("tls_database")) {
+	tls_dtb=JSON.parse(localStorage.getItem("tls_database"))
 }
 else {
-tls_dtb ={
+	tls_dtb ={
 		"objects" : {
 			"tank" : {
 				"lvl" : 1,
@@ -14,17 +14,40 @@ tls_dtb ={
 			"reactors": {
 				"lvl" : 1,
 				"maxSpeed" :1000,
-				"ratio" : 1.3
+				"ratio" : 1.2
 			},
 			"starsContainer": {
 				"lvl" : 1,
 				"canContain" :75,
 				"ratio" : 2
 			}
+		},
+		"galaxy": {
+			"name":"d'Andromède",
+			"range":1,
+			"size":1000,
+			"ratio":5,
+			"color": "#4b6cb7"
 		}
 	}
 }
 
+
+function randomColor() {
+	var hue = Math.round( Math.random() * 360 );
+	return 'hsl(' + hue + ',100%,30%)';
+}
+function randomName(nameLength)
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < nameLength ; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+console.log(tls_dtb.galaxy.color);
 
 
 
@@ -34,6 +57,7 @@ tls_dtb ={
 var tls = {}
 
 tls.el = {} // DOM
+tls.el.body = document.querySelector("body");
 tls.el.container = document.querySelector(".container-game");
 
 //views
@@ -41,15 +65,18 @@ tls.el.launch_page = tls.el.container.querySelector(".landing-page");
 tls.el.game = tls.el.container.querySelector(".game");
 
 //elements
+
 tls.el.colorInput = tls.el.container.querySelector(".colorSpaceship");
 tls.el.spaceship = tls.el.game.querySelector(".game-spaceship svg");
-tls.el.unitTotal = tls.el.game.querySelector(".units-total");
-tls.el.unitSecNb = tls.el.game.querySelector(".unit-sec-nb");
-tls.el.unitSec = tls.el.game.querySelector(".units-sec");
 tls.el.svgPersoParts = tls.el.spaceship.querySelectorAll(".spaceship-personalisation");
+tls.el.unitTotal = tls.el.game.querySelector(".units-total");
+tls.el.unitSec = tls.el.game.querySelector(".units-sec");
+tls.el.unitStill = tls.el.game.querySelector(".units-still");
+tls.el.numberStill = tls.el.game.querySelector(".galaxy-still-dist");
+tls.el.nameGalaxy = tls.el.game.querySelector(".galaxy-name")
 tls.el.dataTotal= tls.el.game.querySelector(".game-total-data span");
-tls.el.dataSpeed = tls.el.game.querySelector(".game-data-speed .game-data-info span");
-tls.el.dataMoney = tls.el.game.querySelector(".game-data-money .game-data-info span");
+tls.el.dataSpeed = tls.el.game.querySelector(".game-data-speed .game-data-info .unit-sec-nb");
+tls.el.dataMoney = tls.el.game.querySelector(".game-data-money .game-data-info .unit-stars-nb");
 
 
 //DATA
@@ -75,9 +102,15 @@ if (localStorage.getItem("tls_distance_stars")) {
 else {
 tls.data.distanceStars = 0;
 }
+if (localStorage.getItem("tls_current_position")) {
+	tls.data.currentPosition = parseFloat(localStorage.getItem("tls_current_position"));
+}
+else {
+tls.data.currentPosition = 0;
+}
 
 // score multiplicator
-tls.data.multi_distance=1;
+tls.data.multi_distance=0.5;
 //speed of the starts
 tls.data.speed = 0.5;
 // user money
@@ -111,6 +144,8 @@ var particles = [];
 
 
 function init() {
+	tls.el.body.setAttribute("style","background:linear-gradient( to top,"+tls_dtb.galaxy.color+" ,#000000)")
+	tls.el.nameGalaxy.innerText= tls_dtb.galaxy.name
     for (var i = 0; i < 400; i++) {
         var particle = {};
         particle.x          = Math.floor(Math.random() * canvas.width);
@@ -213,15 +248,25 @@ console.log("spaceship clicked")
 
 // get points where we was away
 function restore() {
+	console.log(tls.data.distanceTotal)
 	var actualDate = new Date();
 	var pastDate = parseFloat(localStorage.getItem("tls_date"))
-	var differenceDate = Math.round(((actualDate.getTime() - pastDate) / 1000));
-	if(tls.data.distance-differenceDate*100 > 0) {
-			tls.data.distance -= differenceDate*100;
+	var differenceDate = Math.round((actualDate.getTime() - pastDate)/1000)
+	if(tls.data.distance - (differenceDate*10) > 0) {
+		tls.data.distance -= (differenceDate*10)
 	}
 	else {
-		tls.data.distance=0;
+	tls.data.distance=0;
 	}
+	console.log(differenceDate*10);
+	for (var i = 0; i < differenceDate*10; i++) {
+			console.log(i);
+			tls.data.distanceTotal+=  (differenceDate*10)-i
+			tls.data.distanceStars+=  (differenceDate*10)-i
+			tls.data.currentPosition+= (differenceDate*10)-i
+	}
+	console.log(tls.data.distanceTotal)
+
 }
 
 // add speed
@@ -230,12 +275,12 @@ function add_distance() {
 	if(tls.data.distance +  (1*tls.data.multi_distance) < maxSpeed) {
 	tls.data.distance += (1*tls.data.multi_distance);
 		tls.el.dataSpeed.style="color:#2ecc71";
-		tls.el.unitSecNb.classList.remove("unit-max");
+		tls.el.dataSpeed.classList.remove("unit-max");
 }
 else {
 	tls.data.distance = maxSpeed
 		tls.el.dataSpeed.style="color:orange";
-		tls.el.unitSecNb.classList.add("unit-max");
+		tls.el.dataSpeed.classList.add("unit-max");
 }
 
 }
@@ -244,6 +289,7 @@ else {
 setInterval(function() {
 	tls.data.distanceTotal+= (1*tls.data.distance);
 	tls.data.distanceStars+= (1*tls.data.distance);
+	tls.data.currentPosition+=(1*tls.data.distance);
 	money();
 },1000)
 
@@ -253,7 +299,7 @@ if(tls.data.distance> 0) {
 	tls.data.distance -= 1;
 tls.el.dataSpeed.innerText=tls.data.distance;
 	tls.el.dataSpeed.style="color:#e74c3c";
-	tls.el.unitSecNb.classList.remove("unit-max");
+	tls.el.dataSpeed.classList.remove("unit-max");
 }
 }
 
@@ -277,9 +323,11 @@ timeoutStandby = setTimeout(function() {
 function money() {
 	if(tls.data.money < tls_dtb.objects.starsContainer.canContain ) {
 	tls.data.money = Math.floor(tls.data.distanceStars/1000)
+	tls.el.dataMoney.classList.remove("unit-max");
 }
 else {
 	tls.data.money = tls_dtb.objects.starsContainer.canContain;
+	tls.el.dataMoney.classList.add("unit-max");
 }
 tls.el.dataMoney.innerText = tls.data.money;
 }
@@ -292,11 +340,11 @@ function buy(price) {
 function unitsTotal() {
 	if (tls.data.distanceTotal > 0 && tls.data.distanceTotal < 1000) {
 		tls.el.dataTotal.innerText=tls.data.distanceTotal;
-		tls.el.unitTotal.innerText="mètres parcourus"
+		tls.el.unitTotal.innerText="mètres parcourus au total"
 	}
 	else if (tls.data.distanceTotal > 1000) {
 		tls.el.dataTotal.innerText=Math.round(tls.data.distanceTotal/1000);
-		tls.el.unitTotal.innerText="kilomètres parcourus";
+		tls.el.unitTotal.innerText="kilomètres parcourus au total";
 
 	}
 
@@ -314,28 +362,71 @@ function unitsSec() {
 }
 
 
+function stillInGalaxy() {
+	if (tls_dtb.galaxy.size - tls.data.currentPosition > 0) {
+		if(tls_dtb.galaxy.size - tls.data.currentPosition > 1000) {
+		tls.el.numberStill.innerText= Math.round(((tls_dtb.galaxy.size - tls.data.currentPosition)/1000)*100)/100;
+		tls.el.unitStill.innerText=" kilomètres"
+	}
+		else {
+			tls.el.numberStill.innerText= tls_dtb.galaxy.size - tls.data.currentPosition;
+			tls.el.unitStill.innerText=" mètres"
+		}
+	}
+	else {
+		changeGalaxy();
+	}
+}
 
+function changeGalaxy() {
+	if(animationNewGalaxy()) {
+	tls_dtb.galaxy.name =chance.last()
+	tls_dtb.galaxy.range +=1
+	tls_dtb.galaxy.size = tls_dtb.galaxy.size*tls_dtb.galaxy.ratio
+	tls_dtb.galaxy.color = chance.color();
+	tls.data.currentPosition =0;
+	tls.el.body.setAttribute("style","background:linear-gradient( to top,"+tls_dtb.galaxy.color+" ,#000000)")
+	localStorage.setItem('tls_database', JSON.stringify(tls_dtb));
+	setTimeout(function() {
+		tls.el.nameGalaxy.innerText= tls_dtb.galaxy.name
+	},500) // keep suprise effect
+}
+};
+
+function animationNewGalaxy() {
+	tls.el.game.classList.add("changingGalaxy");
+	setTimeout(function() {
+		tls.el.game.classList.remove("changingGalaxy")
+		tls.el.game.classList.add("changingGalaxy-2");
+		setTimeout(function() {
+			tls.el.game.classList.remove("changingGalaxy-2");
+		},500)
+	},1700)
+	return true
+
+}
 
 // update all the data stuff
 function checkData() {
-	console.log(tls.data.distanceTotal);
-	tls.data.multi_distance = 1+ Math.floor((tls.data.distance/75))
-	if(tls.data.speed <=40) {
-		tls.data.speed =  1+ Math.floor((tls.data.distance/5)/20);
+	tls.data.multi_distance = 1+ Math.floor((tls.data.distance/150))
+	if(tls.data.speed <=25) {
+		tls.data.speed =  1+ Math.floor((tls.data.distance/5)/50);
 	}
 	else {
-		tls.data.speed = 40;
+		tls.data.speed = 25;
 	}
 
 
 	unitsSec();
 	unitsTotal();
+	stillInGalaxy();
 	document.title = "TLS : "+ tls.data.distance +" an. lu. /sec.";
-	// localStorage.setItem("tls_distance_total", tls.data.distanceTotal);
-	// localStorage.setItem("tls_distance_stars", tls.data.distanceStars);
-	// localStorage.setItem("tls_distance", tls.data.distance);
-	// var actualDate = new Date();
-	// localStorage.setItem("tls_date", actualDate.getTime());
+	localStorage.setItem("tls_distance_total", tls.data.distanceTotal);
+	localStorage.setItem("tls_distance_stars", tls.data.distanceStars);
+	localStorage.setItem("tls_distance", tls.data.distance);
+	localStorage.setItem("tls_current_position", tls.data.currentPosition);
+	var actualDate = new Date();
+	localStorage.setItem("tls_date", actualDate.getTime());
 }
 
 // loop to launch update
