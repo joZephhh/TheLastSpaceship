@@ -1,7 +1,8 @@
 
 * {
     margin: 0;
-    padding: 0; 
+    padding: 0;
+    user-select:none;
 }
 
 // fullpage game
@@ -22,6 +23,37 @@ body {
         left: 0;
         width: 100%;
         height: 100%;
+        .navbar {
+            width: 150px;
+            height: 40px;
+            position: absolute;
+            top: 0;
+            right: 20px;
+            display: none;
+            ul {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-direction: row;
+                li {
+                    a {
+                        text-decoration: none;
+                        cursor: pointer;
+                        i{
+                            color: grey;
+                        }
+                        &:hover {
+                            i {
+                                color:white;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
         .colorSpaceship {
             background: white;
         }
@@ -125,6 +157,84 @@ body {
             display: flex;
             flex-direction: column;
             justify-content: center;
+            .game-menu {
+                width: 100px;
+                height: 70%;
+                position: absolute;
+                top: 50%;
+                right: 0px;
+                background: #ececec;
+                transform: translateY(-50%) translateX(100%);
+                display: flex;
+                flex-direction: column;
+                justify-content:  center;
+                border-top-left-radius: 20px;
+                border-bottom-left-radius: 20px;
+                z-index: 5;
+                will-change:transform;
+                transition-property: transform;
+                transition-duration: 0.4s;
+                .game-menu-content {
+                    height: 95%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                    .game-menu-item {
+                        width: 100%;
+                        height: 75px;
+                        margin: 0 auto;
+                        text-align: center;
+                        position: relative;
+
+
+                        img {
+                            height: 70px;
+                            margin-top: 2.5px;
+                            width: auto;
+                        }
+                        .game-menu-item-details {
+                            position: absolute;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            right:calc(100% + 20px) ;
+                            width: 200px;
+                            height: 60px;
+                            display: none;
+                            text-align: center;
+                            border-radius: 10px;
+                            z-index: 1;
+                            flex-direction: column;
+                            justify-content: center;
+                            span {
+                                color: white;
+                                font-family: sans-serif;
+                                display: block;
+                                    &.item-name {
+                                            font-family: 'Nova Mono', monospace;
+                                            margin-bottom: 10px;
+                                    }
+                            }
+                            &:after {
+                                content: "";
+                                width: 30px;
+                                height: 30px;
+                                position: absolute;
+                                z-index: -1;
+                                top: 50%;
+                                transform: translateY(-50%) rotate(45deg);
+                                left:calc(100% - 20px);
+                                background: inherit;
+                            }
+                        }
+                        &:hover {
+                            cursor: pointer;
+                            .game-menu-item-details {
+                                display: flex;
+                            }
+                        }
+                    }
+            }
+            }
             .game-progression {
                 font-family: 'Nova Mono', monospace;
                 font-size: 24px;
@@ -161,35 +271,85 @@ body {
                     position: absolute;
                     display: flex;
                     flex-direction: row-reverse;
-                    justify-content: space-between;
+                    justify-content: flex-start;
                     align-items: center;
                     color: #ececec;
                     height: 100px;
+                    width: auto;
+
 
 
 // data about spaceship speed
                     &.game-data-speed {
-                        width: 250px;
+
+                        .game-data-stroke {
+                            width: 70px;
+                        }
+                    }
+                    &.game-data-radar {
+
                         .game-data-stroke {
                             width: 130px;
+                            height: 4px;
+                        }
+                    }
+                    &.game-data-temp {
+                            flex-direction: row;
+                        .game-data-stroke {
+                            width: 30px;
+                            height: 4px;
                         }
                     }
 
 // data about spaceship level of gas
                     &.game-data-tank {
-                        width: 400px;
+
                         .game-data-stroke {
-                            width: 300px;
+                            width: 120px;
+                            height: 4px;
+                        }
+                        .game-data-info {
+                            .unit-loose-nb {
+                                display: block;
+                                font-size: 15px;
+                                position: absolute;
+                                top: 0px;
+                                left: calc(100% - 35px);
+                                width: auto;
+                                text-align: left;
+                                font-size: 15px;
+
+                            }
+                            .units {
+                                &.tank {
+                                    &::after {
+                                        display: block;
+                                        content: "% /s";
+                                        font-size: 15px;
+                                        position: absolute;
+                                        top: 0px;
+                                        left: 120%;
+                                        font-family: "FontAwesome", "Nova Mono";
+                                        width: 120px;
+                                        text-align: left;
+                                    }
+                                }
+                            }
+
                         }
                     }
 
 // data about user money
                     &.game-data-money {
-                        width: 240px;
                         flex-direction: row;
-
                         .game-data-stroke {
                             width: 130px;
+                        }
+                    }
+                    &.game-data-armor {
+                        flex-direction: row;
+                        .game-data-stroke {
+                            width: 65px;
                         }
                     }
 
@@ -208,17 +368,20 @@ body {
                     .game-data-info {
                         font-family: sans-serif;
                         will-change: transform;
-                        transform: opacity;
+                        transition: opacity;
                         opacity: 0;
                         transition-property: opacity;
                         transition-duration: 0.5s;
                         transition-delay: 1.1s;
+                        min-width: 200px;
 
                         span {
-
-                            color: white;
+                            color: inherit;
                             font-size: 15px;
-                            &:first-of-type {
+                            &.units-min-data {
+                                font-size: 10px !important;
+                            }
+                            &.units {
                                 font-family: 'Nova Mono', monospace;
                                 font-size: 35px;
                                 font-weight: bold;
@@ -240,6 +403,162 @@ body {
 
 
                                 }
+                                &.increment {
+                                    color: #2ecc71;
+                                }
+                                &.decrement {
+                                    color : #e74c3c;
+                                }
+                                &.unit-new-value {
+                                    color: yellow;
+                                    &::after {
+                                        display: block;
+                                        content: "MAX \f0aa";
+                                        font-size: 15px;
+                                        position: absolute;
+                                        top: 0px;
+                                        left: 120%;
+                                        font-family: "FontAwesome", "Nova Mono";
+                                        text-align: left;
+                                        width: 120px;
+                                    }
+
+
+                            }
+                            &.tank {
+                                span {
+                                    font-size: 15px
+                                }
+                                &.unit-new-value {
+                                    color: yellow;
+                                    width: auto;
+                                    &::after {
+                                        display: block;
+                                        content: "% /s  \f0aa";
+                                        font-size: 15px;
+                                        position: absolute;
+                                        top: 0px;
+                                        left: 120%;
+                                        font-family: "FontAwesome", "Nova Mono";
+                                        width: 120px;
+                                        text-align: left;
+                                    }
+
+
+                            }
+                            }
+                            &.armor {
+                                span {
+                                    font-size: 15px
+                                }
+                                &.unit-max {
+                                    color: orange;
+                                    &::after {
+                                        display: block;
+                                        content: "";
+                                        font-size: 15px;
+                                        position: absolute;
+                                        top: 0px;
+                                        left: 120%;
+                                        font-family: "FontAwesome", "Nova Mono";
+                                        width: 120px;
+                                        text-align: left;
+                                    }
+                                }
+                                &.unit-new-value {
+                                    color: yellow;
+                                    width: auto;
+                                    &::after {
+                                        display: block;
+                                        content: "\f0aa";
+                                        font-size: 15px;
+                                        position: absolute;
+                                        top: 0px;
+                                        left: 120%;
+                                        font-family: "FontAwesome", "Nova Mono";
+                                        width: 120px;
+                                        text-align: left;
+                                    }
+
+
+                            }
+                            }
+                            &.radar {
+                                span {
+                                    font-size: 15px
+                                }
+                                &.unit-max {
+                                    color: orange;
+                                    &::after {
+                                        display: block;
+                                        content: "";
+                                        font-size: 15px;
+                                        position: absolute;
+                                        top: 0px;
+                                        left: 120%;
+                                        font-family: "FontAwesome", "Nova Mono";
+                                        width: 120px;
+                                        text-align: left;
+                                    }
+                                }
+                                &.unit-new-value {
+                                    color: yellow;
+                                    width: auto;
+                                    &::after {
+                                        display: block;
+                                        content: "\f0aa";
+                                        font-size: 15px;
+                                        position: absolute;
+                                        top: 0px;
+                                        left: 120%;
+                                        font-family: "FontAwesome", "Nova Mono";
+                                        width: 120px;
+                                        text-align: left;
+                                    }
+
+
+                            }
+                            }
+                            &.solarResist{
+                                span {
+                                    font-size: 15px
+                                }
+                                &.unit-max {
+                                    color: orange;
+                                    &::after {
+                                        display: block;
+                                        content: "";
+                                        font-size: 15px;
+                                        position: absolute;
+                                        top: 0px;
+                                        left: 120%;
+                                        font-family: "FontAwesome", "Nova Mono";
+                                        width: 120px;
+                                        text-align: left;
+                                    }
+                                }
+                                &.unit-new-value {
+                                    color: yellow;
+                                    width: auto;
+                                    &::after {
+                                        display: block;
+                                        content: "\f0aa";
+                                        font-size: 15px;
+                                        position: absolute;
+                                        top: 0px;
+                                        left: 120%;
+                                        font-family: "FontAwesome", "Nova Mono";
+                                        width: 120px;
+                                        text-align: left;
+                                    }
+
+
+                            }
+                            }
+                            &.units-min {
+                                font-size: 15px !important;
+                            }
+
                             }
                         }
 
@@ -258,15 +577,27 @@ body {
 // properties to lvl-1
                 &.spaceship-lvl-1 {
                     .game-data-speed {
-                        top: -10px;
+                        top: -15px;
                         right: 65%;
+                    }
+                    .game-data-temp {
+                        top: 80px;
+                        left: 65%;
                     }
                     .game-data-tank {
-                        top: 80px;
+                        top: 100px;
+                        right: 50%;
+                    }
+                    .game-data-radar {
+                        top: 40px;
                         right: 65%;
                     }
+                    .game-data-armor {
+                        top: -35px;
+                        left: 60%;
+                    }
                     .game-data-money {
-                        top: 50px;
+                        top: 30px;
                         left: 65%;
                     }
                 }
@@ -291,6 +622,27 @@ body {
                     font-weight: lighter;
                 }
             }
+            .game-stars-shop {
+                margin-top: 100px;
+                text-align: center;
+                font-size: 35px;
+                color: white;
+                font-family: 'Nova Mono', monospace;
+                will-change:opacity;
+                transition: opacity;
+                transition-duration: 0.5s;
+                transition-delay: 1s;
+                opacity: 0;
+                display: none;
+                span:first-child {
+                    font-weight: bolder;
+                    font-size: 45px;
+                }
+                span:last-child {
+                    font-weight: lighter;
+                }
+            }
+
 // when I click on .ld-start-button and I add .launched to .game
             &.launched {
                 .game-spaceship {
@@ -346,6 +698,42 @@ body {
                 transform: translateY(500%);
             }
             }
+
+        }
+        &.menu-open {
+            .navbar {
+                ul {
+                    li {
+                        a {
+                            &.menu-open {
+                                i {
+                                    color: orange;
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+        .game {
+
+            .game-spaceship {
+                transform: translateX(-50%) scale(1.2);
+            }
+            .game-menu {
+                transform: translateY(-50%) translateX(0%);
+            }
+            .game-total-data {
+                opacity: 0;
+                display: none;
+            }
+            .game-stars-shop {
+                display: block;
+                opacity: 1;
+
+            }
+        }
+
         }
     }
 }

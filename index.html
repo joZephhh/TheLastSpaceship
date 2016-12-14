@@ -13,6 +13,7 @@
         <link href="https://fonts.googleapis.com/css?family=Nova+Mono" rel="stylesheet">
         <!-- build:css assets/css/style.css -->
     <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.css">
     <link rel="stylesheet" href="assets/css/main.css">
         <!-- endbuild -->
 
@@ -27,6 +28,15 @@
     <div class="container-game">
         <input type="text" class="colorSpaceship">
         <button class="testShop">Buy</button>
+        <nav class="navbar">
+            <ul>
+                <li><a href="" class="menu-icon"><i class="fa fa-space-shuttle" aria-hidden="true"></i></a></li>
+                <li><a href="" class="menu-icon"><i class="fa fa-wrench" aria-hidden="true"></i></a></li>
+                <li><a href="" class="menu-icon"><i class="fa fa-question-circle" aria-hidden="true"></i></i></a></li>
+                <li><a href="" class="menu-icon"><i class="fa fa-bug" aria-hidden="true"></i></a></li>
+                <li><a href="" class="menu-icon"><i class="fa fa-github" aria-hidden="true"></i></i></a></li>
+            </ul>
+        </nav>
     <!-- Landing page -->
     <div class="landing-page">
         <div class="landing-page-content">
@@ -40,6 +50,17 @@
 
     </div>
     <div class="game">
+        <div class="game-menu">
+            <div class="game-menu-content">
+                <div class="game-menu-item" data-store ="reactors"><img src="assets/images/coquemetal.png" alt=""><div class="game-menu-item-details"><span class="item-name"></span> <span class="item-lvl"></span></div></div>
+                <div class="game-menu-item" data-store ="starsContainer"><img src="assets/images/coquemetal.png" alt=""><div class="game-menu-item-details"><span class="item-name"></span> <span class="item-lvl"></span></div></div>
+                <div class="game-menu-item" data-store ="goFull"><img src="assets/images/coquemetal.png" alt=""><div class="game-menu-item-details"><span class="item-name" style="margin:0"></span> <span class="item-lvl" style="display:none"></span></div></div>
+                <div class="game-menu-item" data-store ="armor"><img src="assets/images/coquemetal.png" alt=""><div class="game-menu-item-details"><span class="item-name"></span> <span class="item-lvl"></span></div></div>
+                <div class="game-menu-item" data-store ="tank"><img src="assets/images/coquemetal.png" alt=""><div class="game-menu-item-details"><span class="item-name"></span> <span class="item-lvl"></span></div></div>
+                <div class="game-menu-item" data-store ="solarResist"><img src="assets/images/coquemetal.png" alt=""><div class="game-menu-item-details"><span class="item-name"></span> <span class="item-lvl"></span></div></div>
+                <div class="game-menu-item" data-store ="radar"><img src="assets/images/coquemetal.png" alt=""><div class="game-menu-item-details"><span class="item-name"></span> <span class="item-lvl"></span></div></div>
+            </div>
+        </div>
         <h3 class="game-progression">Encore <span class="galaxy-still-dist"></span><span class="units-still"></span> dans la galaxie <span class="galaxy-name"></span></h3>
         <div class="game-spaceship spaceship-lvl-1 ">
             <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 404.97 431.63">
@@ -74,19 +95,32 @@
 
             <div class="game-data game-data-speed">
                 <div class="game-data-stroke"></div>
-                <p class="game-data-info game-data-info-r"><span class="unit-sec-nb">0</span><br> <span class="units-sec">mètres /s.</span></p>
+                <p class="game-data-info game-data-info-r"><span class=" units unit-sec-nb reactors">0</span><br> <span class="units-sec">mètres /s.</span></p>
+            </div>
+            <div class="game-data game-data-radar">
+                <div class="game-data-stroke"></div>
+                <p class="game-data-info game-data-info-r"><span class=" units unit-meters-nb radar units-min">0m</span><br> <span class="units-sec units-min-data">Portée du radar</span></p>
+            </div>
+            <div class="game-data game-data-armor">
+                <div class="game-data-stroke"></div>
+                <p class="game-data-info game-data-info-l"><span class=" units unit-arm armor units-min">Carcasse</span><br> <span class="units-sec units-min-data">Etat de la carosserie</span></p>
             </div>
             <div class="game-data game-data-tank">
                 <div class="game-data-stroke"></div>
-                <p class="game-data-info game-data-info-r"><span>100%</span><br>de carburant disponible</p>
+                <p class="game-data-info game-data-info-r"><span class=" units unit-per-nb ">100% </span><span class="unit-loose-nb units tank"><span class="units">-3</span></span><br>de carburant disponible </p>
+            </div>
+            <div class="game-data game-data-temp">
+                <div class="game-data-stroke"></div>
+                <p class="game-data-info game-data-info-l"><span class=" units unit-temp-nb solarResist units-min">230<span>°C</span></span><br> <span class="units-temp units-min-data">Resistance max.</span></p>
             </div>
             <div class="game-data game-data-money">
                 <div class="game-data-stroke"></div>
-                <p class="game-data-info game-data-info-l"><span class="unit-stars-nb">0</span><br>poussières d'étoiles</p>
+                <p class="game-data-info game-data-info-l"><span class=" units unit-stars-nb money">0</span> <span class="units unit-stars-nb-max starsContainer"></span><br>poussières d'étoiles</p>
             </div>
 
         </div>
         <h1 class="game-total-data"><span class="number">0</span><br><span class="units-total">mètres parcourus</span></h1>
+        <h1 class="game-stars-shop"><span class="number">0</span><br><span class="units-total">poussières d'étoiles</span></h1>
     </div>
 </div>
 
