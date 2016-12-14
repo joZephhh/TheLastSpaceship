@@ -251,16 +251,19 @@ console.log("spaceship clicked")
 function restore() {
 	console.log("distance totale avant ",tls.data.distanceTotal)
 	console.log("distance/s avant",tls.data.distance )
+	var tempDistance;
 	var actualDate = new Date();
 	var pastDate = parseFloat(localStorage.getItem("tls_date"))
 	var differenceDate = Math.round((actualDate.getTime() - pastDate)/1000)
 	if(tls.data.distance - (differenceDate*100) > 0) {
 		tls.data.distance -= (differenceDate*100)
+		tempDistance= tls.data.distance+(differenceDate*10);
 	}
 	else {
 	tls.data.distance=0;
+	tempDistance=0;
 	}
-	var tempDistance = tls.data.distance+(differenceDate*10);
+
 
 	for (var i = 0; i < differenceDate*10; i++) {
 		if(tempDistance>0) {
