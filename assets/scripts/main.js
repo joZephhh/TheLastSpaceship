@@ -390,7 +390,7 @@ function store_init() {
 		var item = tls.el.shopsItems[i].getAttribute("data-store");
 		console.log(tls_dtb.objects[item].name)
 		tls.el.shopsItems[i].querySelector(".item-name").innerText=tls_dtb.objects[item].name
-		tls.el.shopsItems[i].querySelector(".item-lvl").innerHTML="nv."+tls_dtb.objects[item].lvl+"&nbsp<i class='fa fa-arrow-right' aria-hidden='true'></i>&nbsp"+" nb."+parseFloat(tls_dtb.objects[item].lvl+1)
+		tls.el.shopsItems[i].querySelector(".item-lvl").innerHTML="nv."+tls_dtb.objects[item].lvl+"&nbsp<i class='fa fa-arrow-right' aria-hidden='true'></i>&nbsp"+" nv."+parseFloat(tls_dtb.objects[item].lvl+1)
 	}
 	return true;
 }
