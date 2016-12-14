@@ -78,7 +78,8 @@ tls.el.dataTotal= tls.el.game.querySelector(".game-total-data span");
 tls.el.dataSpeed = tls.el.game.querySelector(".game-data-speed .game-data-info .unit-sec-nb");
 tls.el.dataMoney = tls.el.game.querySelector(".game-data-money .game-data-info .unit-stars-nb");
 
-
+// statut
+tls.canLoop = true;
 //DATA
 tls.data = {}
 
@@ -248,24 +249,30 @@ console.log("spaceship clicked")
 
 // get points where we was away
 function restore() {
-	console.log(tls.data.distanceTotal)
+	console.log("distance totale avant ",tls.data.distanceTotal)
+	console.log("distance/s avant",tls.data.distance )
 	var actualDate = new Date();
 	var pastDate = parseFloat(localStorage.getItem("tls_date"))
 	var differenceDate = Math.round((actualDate.getTime() - pastDate)/1000)
-	if(tls.data.distance - (differenceDate*10) > 0) {
-		tls.data.distance -= (differenceDate*10)
+	if(tls.data.distance - (differenceDate*100) > 0) {
+		tls.data.distance -= (differenceDate*100)
 	}
 	else {
 	tls.data.distance=0;
 	}
-	console.log(differenceDate*10);
+	var tempDistance = tls.data.distance+(differenceDate*10);
+
 	for (var i = 0; i < differenceDate*10; i++) {
-			console.log(i);
+		if(tempDistance>0) {
 			tls.data.distanceTotal+=  (differenceDate*10)-i
 			tls.data.distanceStars+=  (differenceDate*10)-i
 			tls.data.currentPosition+= (differenceDate*10)-i
+			tempDistance-=1
+		}
+
 	}
-	console.log(tls.data.distanceTotal)
+	console.log("distance totale après",tls.data.distanceTotal)
+		console.log("distance/s apres",tls.data.distance )
 
 }
 
@@ -431,16 +438,24 @@ function checkData() {
 
 // loop to launch update
 function loop_data() {
-	window.requestAnimationFrame(loop_data);
-	checkData();
+	if (tls.canLoop) {
+		window.requestAnimationFrame(loop_data);
+		checkData();
+	}
+
 }
 
 // BETA
 function tls_reset() {
-	localStorage.setItem("tls_distance_total", 0);
-	localStorage.setItem("tls_distance_stars", 0);
-	localStorage.setItem("tls_distance", 0);
-	console.log("done")
+	tls.canLoop=false;
+	localStorage.removeItem("tls_distance_total");
+	localStorage.removeItem("tls_distance_stars");
+	localStorage.removeItem("tls_distance");
+	localStorage.removeItem("tls_current_position");
+	localStorage.removeItem("tls_date");
+	localStorage.removeItem("tls_database");
+	console.log("done");
+	location.reload();
 
 }
 

@@ -10,10 +10,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/reset.css">
-    <link href="https://fonts.googleapis.com/css?family=Nova+Mono" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/main.css">
-
+        <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
 
@@ -25,21 +22,22 @@
     <!-- Container -->
     <div class="container-game">
         <input type="text" class="colorSpaceship">
+        <button class="testShop">Buy</button>
     <!-- Landing page -->
     <div class="landing-page">
         <div class="landing-page-content">
             <img src="assets/images/spaceship.png" alt="" class="lg-spaceship">
             <h1>The Last Spaceship</h1>
             <a href="" class="ld-start">
-                <div class="ld-start-button"><span>Continuer votre épopée</span></div>
+                <div class="ld-start-button"><span>Continuez votre épopée</span></div>
             </a>
             <div class="ld-earth"><img src="assets/images/Earth.png" alt=""></div>
         </div>
 
     </div>
     <div class="game">
+        <h3 class="game-progression">Encore <span class="galaxy-still-dist"></span><span class="units-still"></span> dans la galaxie <span class="galaxy-name"></span></h3>
         <div class="game-spaceship spaceship-lvl-1 ">
-
             <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 404.97 431.63">
               <title>ship_V1.ai</title>
               <path d="M391.86,597.49s51.5,8.3,89.27-.27S429,572,429,572Z" transform="translate(-233.79 -198.12)" style="fill: #1c1c1c"/>
@@ -72,7 +70,7 @@
 
             <div class="game-data game-data-speed">
                 <div class="game-data-stroke"></div>
-                <p class="game-data-info game-data-info-r"><span>0</span><br> an. lu. /sec.</p>
+                <p class="game-data-info game-data-info-r"><span class="unit-sec-nb">0</span><br> <span class="units-sec">mètres /s.</span></p>
             </div>
             <div class="game-data game-data-tank">
                 <div class="game-data-stroke"></div>
@@ -80,11 +78,11 @@
             </div>
             <div class="game-data game-data-money">
                 <div class="game-data-stroke"></div>
-                <p class="game-data-info game-data-info-l"><span>0</span><br>poussières d'étoiles</p>
+                <p class="game-data-info game-data-info-l"><span class="unit-stars-nb">0</span><br>poussières d'étoiles</p>
             </div>
 
         </div>
-        <h1 class="game-total-data"><span class="number">0</span><br><span class="units">années lumières parcourues</span></h1>
+        <h1 class="game-total-data"><span class="number">0</span><br><span class="units-total">mètres parcourus</span></h1>
     </div>
 </div>
 
