@@ -18,42 +18,48 @@ else {
 				"lvl" : 1,
 				"value" : 230,
 				"ratio" : 6,
-				"price":120
+				"price":20,
+				"unit":"m"
 			},
 			"reactors": {
 				"name":"Réacteur",
 				"lvl" : 1,
 				"value" :1000,
 				"ratio" : 1.2,
-				"price":75
+				"price":75,
+				"unit":""
 			},
 			"starsContainer": {
 				"name":"Caisse à poussières",
 				"lvl" : 1,
 				"value" :75,
 				"ratio" : 2,
-				"price":55
+				"price":55,
+				"unit":""
 			},
 			"armor": {
 				"name":"Coque",
 				"lvl" : 1,
 				"value" :["Carcasse","Amas de taule","Rouillée","Quelques impacts","Solide","Impacable"],
 				"ratio" : 0 ,
-				"price":120
+				"price":20,
+				"unit":""
 			},
 			"solarResist": {
 				"name":"Refroidissement",
 				"lvl" : 1,
 				"value" :230,
 				"ratio" : 3,
-				"price":120
+				"price":20,
+				"unit":"°C"
 			},
 			"goFull": {
 				"name":"Faire le plein",
 				"lvl" : 1,
 				"value" :110,
 				"ratio" : 2,
-				"price":120
+				"price":120,
+				"unit":""
 			}
 
 		},
@@ -104,7 +110,8 @@ tls.el.game = tls.el.container.querySelector(".game");
 //elements
 
 tls.el.colorInput = tls.el.container.querySelector(".colorSpaceship");
-tls.el.spaceship = tls.el.game.querySelector(".game-spaceship svg");
+tls.el.spaceshipContainer =tls.el.game.querySelector(".game-spaceship")
+tls.el.spaceship = tls.el.spaceshipContainer.querySelector(".game-spaceship svg");
 tls.el.svgPersoParts = tls.el.spaceship.querySelectorAll(".spaceship-personalisation");
 
 
@@ -199,6 +206,10 @@ var particles = [];
 function init() {
 	tls.el.body.setAttribute("style","background:linear-gradient( to top,"+tls_dtb.galaxy.color+" ,#000000)")
 	tls.el.nameGalaxy.innerText= tls_dtb.galaxy.name
+	tls.el.dataTemp.innerText=tls_dtb.objects.solarResist.value+tls_dtb.objects.solarResist.unit
+	tls.el.dataRadar.innerText=tls_dtb.objects.radar.value+tls_dtb.objects.radar.unit
+	tls.el.dataLooseTank.innerText=tls_dtb.objects.tank.value
+	tls.el.dataArmor.innerText=tls_dtb.objects.armor.value[tls_dtb.objects.armor.ratio]
 	for (var i = 0; i < tls.el.shopsItems.length; i++) {
 		tls.el.shopsItems[i].querySelector(".game-menu-item-details").style.backgroundColor=tls_dtb.galaxy.color;
 	}
@@ -355,7 +366,14 @@ function init_game(e) {
 
 function checkMoney() {
 	tls.data.distanceTotal+= (1*tls.data.distance);
-	tls.data.distanceStars+= (1*tls.data.distance);
+	if (tls.data.distanceStars + (1*tls.data.distance)<= tls_dtb.objects.starsContainer.value*1000) {
+
+		tls.data.distanceStars+= (1*tls.data.distance);
+	}
+	else {
+		tls.data.distanceStars= tls_dtb.objects.starsContainer.value*1000
+	}
+
 	tls.data.currentPosition+=(1*tls.data.distance);
 	localStorage.setItem("tls_distance_total", tls.data.distanceTotal);
 	localStorage.setItem("tls_distance_stars", tls.data.distanceStars);
@@ -403,19 +421,24 @@ console.log("store init")
 			var price = tls_dtb.objects[item].price
 			canBuy(item,price);
 		})
+		tls.el.shopsItems[i].addEventListener("click", function() {
+			var item = this.getAttribute("data-store");
+			var price = tls_dtb.objects[item].price
+			canBuy(item,price,"buy");
+		})
 		tls.el.shopsItems[i].addEventListener("mouseout", function() {
 			var item = this.getAttribute("data-store");
 			if (item=="armor") {
 				var value = tls_dtb.objects[item].value[tls_dtb.objects[item].ratio]
 			}
 			else if (item=="solarResist") {
-				var value = tls_dtb.objects[item].value +"°C"
+				var value = parseFloat(tls_dtb.objects[item].value) + tls_dtb.objects.solarResist.unit
 			}
 			else if (item=="radar") {
-				var value = tls_dtb.objects[item].value +"m"
+				var value = parseFloat(tls_dtb.objects[item].value) + tls_dtb.objects.radar.unit
 			}
 			else {
-				var value = tls_dtb.objects[item].value;
+				var value = parseFloat(tls_dtb.objects[item].value);
 			}
 			var selector = "."+item
 
@@ -426,48 +449,75 @@ console.log("store init")
 		})
 	}
 }
-function canBuy(item, price) {
-
+function canBuy(item, price, type) {
+var canBeBought= false;
 	if (tls.data.money - price >= 0) {
-		console.log("can buy"+item);
 		tls.el.starsShop.innerText=tls.data.money - price;
 		tls.el.starsShop.style.color="orange";
 		tls.el.starsShop.classList.remove("unit-max");
+		if(type=="buy"){
+			tls.data.money -= price
+			tls.data.distanceStars -= price*1000
+			tls.el.starsShop.innerText=tls.data.money;
+			tls.el.dataMoney.innerText=tls.data.money+"/";
+		}
 	}
 	else {
-		console.log("cant buy"+item );
 		tls.el.starsShop.innerHTML=parseFloat(tls.data.money-price) ;
 		tls.el.starsShop.style.color="red";
+		if(type=="buy") {
+			return false;
+		}
 	}
 
-
-	console.log(item, selector)
 	var selector = "."+item
 	if (item == "armor") {
+		if(tls_dtb.objects.armor.ratio+1 < tls_dtb.objects.armor.value.length ) {
+			canBeBought=true;
+			var newValue = tls_dtb.objects.armor.value[parseFloat(tls_dtb.objects.armor.ratio)+1];
+				tls.el.game.querySelector(selector).innerHTML=newValue
+		}
 
-		var newValue = tls_dtb.objects.armor.value[parseFloat(tls_dtb.objects.armor.ratio)+1];
 	}
 	else if (item == "solarResist") {
 
-		var newValue = (tls_dtb.objects[item].value * tls_dtb.objects[item].ratio ) +"°C"
+		var newValue = (tls_dtb.objects[item].value * tls_dtb.objects[item].ratio )
+			tls.el.game.querySelector(selector).innerHTML=newValue + tls_dtb.objects[item].unit
 	}
 	else if (item == "radar") {
 
-		var newValue = (tls_dtb.objects[item].value * tls_dtb.objects[item].ratio ) +"m"
+		var newValue = (tls_dtb.objects[item].value * tls_dtb.objects[item].ratio )
+		tls.el.game.querySelector(selector).innerHTML=newValue + tls_dtb.objects[item].unit
 	}
 	else {
 		var selector = "."+item
-		var newValue = (tls_dtb.objects[item].value)* (tls_dtb.objects[item].ratio)
+		var newValue = parseFloat((tls_dtb.objects[item].value)* (tls_dtb.objects[item].ratio))
+		tls.el.game.querySelector(selector).innerHTML=newValue
 	}
-	tls.el.game.querySelector(selector).innerHTML=newValue;
 	tls.el.game.querySelector(selector).classList.add("unit-new-value");
+	if(type=="buy" ) {
+		if(item=="armor" && canBeBought) {
+			tls_dtb.objects.armor.ratio+=1
+		}
+		else {
+			tls_dtb.objects[item].value=newValue;
+		}
+		tls_dtb.objects[item].lvl+=1
+		tls_dtb.objects[item].price=tls_dtb.objects[item].ratio *tls_dtb.objects[item].price
+		localStorage.setItem('tls_database', JSON.stringify(tls_dtb));
+		store_init();
+	}
 
 }
 
 
-tls.el.spaceship.addEventListener("click", function() {
+tls.el.spaceshipContainer.addEventListener("click", function() {
 
 if (tls.canLoop) {
+	tls.el.spaceship.classList.add("clicked")
+	tls.el.spaceship.addEventListener("animationend",function() {
+		tls.el.spaceship.classList.remove("clicked")
+	})
 	add_distance();
 	rebootStationary();
 }
@@ -496,7 +546,9 @@ function restore() {
 	for (var i = 0; i < differenceDate*10; i++) {
 		if(tempDistance>0) {
 			tls.data.distanceTotal+=  (differenceDate*10)-i
-			tls.data.distanceStars+=  (differenceDate*10)-i
+			if (tls.data.distanceStars+((differenceDate*10)-i)< tls_dtb.objects.starsContainer.value) {
+				tls.data.distanceStars+=  (differenceDate*10)-i
+			}
 			tls.data.currentPosition+= (differenceDate*10)-i
 			tempDistance-=1
 		}
@@ -563,17 +615,21 @@ timeoutStandby = setTimeout(function() {
 // show the money
 function money() {
 	if(tls.data.money < parseFloat(tls_dtb.objects.starsContainer.value )) {
+	console.log(tls.data.money)
 	tls.data.money = Math.floor(tls.data.distanceStars/1000)
 	tls.el.dataMoneyMax.classList.remove("unit-max");
+
 }
 else {
 	tls.data.money = parseFloat(tls_dtb.objects.starsContainer.value) ;
 	tls.el.dataMoneyMax.classList.add("unit-max");
 }
+
 tls.el.dataMoney.innerText = tls.data.money+"/";
 tls.el.dataMoneyMax.innerText=parseFloat(tls_dtb.objects.starsContainer.value);
 tls.el.starsShop.innerText = tls.data.money;
 console.log(parseFloat(tls_dtb.objects.starsContainer.value));
+console.log(tls.data.distanceStars)
 }
 
 function unitsTotal() {

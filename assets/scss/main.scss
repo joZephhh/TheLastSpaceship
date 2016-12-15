@@ -259,10 +259,16 @@ body {
                 transition-property: transform;
                 transition-duration: 1s;
 
+
                 svg {
                     width: calc(100%/2);
                     height: auto;
                     cursor: pointer;
+                    will-change:transform;
+                    &.clicked {
+                        animation-name: svgClicked;
+                        animation-duration: 0.1s;
+                    }
 
                 }
 
@@ -642,6 +648,13 @@ body {
                 span:last-child {
                     font-weight: lighter;
                 }
+                .number {
+                &.cantBuy {
+                    animation-name: cantBuy;
+                    animation-duration: 1s;
+                    color: red;
+                }
+            }
             }
 
 // when I click on .ld-start-button and I add .launched to .game
@@ -766,5 +779,15 @@ body {
 @keyframes ldFloatShipLaunch {
     100% {
         transform: translateY(-300%);
+    }
+}
+@keyframes svgClicked {
+    100% {
+        transform: scale(1.05);
+    }
+}
+@keyframes cantBuy {
+    100% {
+        transform: scale(1.2);
     }
 }
