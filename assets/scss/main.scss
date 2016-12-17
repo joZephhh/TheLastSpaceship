@@ -15,6 +15,71 @@ html {
 // background sky
 body {
     overflow: hidden;
+.background-obstacles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    will-change:transform;
+
+    &.solarEruption {
+        background-image: url("../images/solarEruption.png");
+        background-size: 700px;
+        background-repeat: no-repeat;
+        background-position: center;
+        animation-name: rotateSolar;
+        animation-duration: 4s;
+        animation-timing-function: linear;
+        animation-direction: alternate;
+        animation-iteration-count: infinite;
+    }
+    &.asteroids {
+        background-image: url("../images/asteroids.png");
+        background-size: 400px;
+        background-repeat-y:space;
+        background-position: center;
+        animation-name: translateAsteroids;
+        animation-duration: 4s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+    &.blackhole {
+        background-image: url("../images/blackhole.png");
+        background-size: 700px;
+        background-repeat: no-repeat;
+        background-position: center;
+        animation-name: rotateSolar;
+        animation-duration: 4s;
+        animation-timing-function: linear;
+        animation-direction: alternate;
+        animation-iteration-count: infinite;
+    }
+    &.vortex {
+        background-image: url("../images/vortex.png");
+        background-size: 700px;
+        background-repeat: no-repeat;
+        background-position: center;
+        animation-name: rotateSolar;
+        animation-duration: 4s;
+        animation-timing-function: linear;
+        animation-direction: alternate;
+        animation-iteration-count: infinite;
+    }
+    &.wind {
+        background-image: url("../images/wind.png");
+        background-size: 700px;
+        background-repeat: no-repeat;
+        background-position: left;
+        animation-name: windTranslate;
+        animation-duration: 4s;
+        animation-timing-function: linear;
+        animation-direction: alternate;
+        animation-iteration-count: infinite;
+        transform-origin: left;
+    }
+
+}
 
 //container
     .container-game {
@@ -23,13 +88,67 @@ body {
         left: 0;
         width: 100%;
         height: 100%;
+        z-index: 1000;
+        .game-statut-obstacle {
+            width: 600px;
+            height: 70px;
+            background: #e74c3c;
+            margin: 0 auto;
+            border-radius: 10px;
+            border: 2px solid #c0392b;
+            position: absolute;
+            top: 25px;
+            left:50%;
+            transform:translate(-50%,-625px);
+            transition-duration: 0.5s;
+            transition-property: transform;
+            display: flex;
+            justify-content: space-around;
+            flex-direction: column;
+            .game-statut-content {
+                width: 100%;
+                height: 100%;
+                position: relative;
+            h4 {
+                margin-top: 10px;
+                color: white;
+                text-align: left;
+                padding-left: 10px;
+                line-height: 1.3;
+                font-family: "Nova Mono", sans-serif;
+            }
+            .game-statut-fix {
+                position: absolute;
+                bottom: -20px;
+                left: calc(100% - 125px);
+                width: 250px;
+                height: 40px;
+                background: white;
+                margin: 0 auto;
+                border-radius: 10px;
+                text-align: center;
+                
+                a {
+                    text-decoration: none;
+                    line-height: 40px;
+                    font-family: "Nova Mono", sans-serif;
+                    font-size: 15px;
+                }
+            }
+        }
+        &.active {
+                transform:translate(-50%,0px);
+        }
+        &.error {
+            transform:translate(-50%,0px) scale(1.1);
+        }
+    }
         .navbar {
-            width: 150px;
+            width: 70px;
             height: 40px;
             position: absolute;
             top: 0;
             right: 20px;
-            display: none;
             ul {
                 width: 100%;
                 height: 100%;
@@ -49,6 +168,11 @@ body {
                                 color:white;
                             }
 
+                        }
+                        &.muted {
+                            i {
+                                color: orange;
+                            }
                         }
                     }
                 }
@@ -157,6 +281,7 @@ body {
             display: flex;
             flex-direction: column;
             justify-content: center;
+
             .game-menu {
                 width: 100px;
                 height: 70%;
@@ -240,12 +365,13 @@ body {
                 font-size: 24px;
                 color: #ececec;
                 text-align: center;
-                margin-bottom: 100px;
+                margin-bottom: 50px;
                 will-change: opacity;
                 opacity: 0;
                 transition-property: opacity;
                 transition-duration: 0.5s;
                 transition-delay: 1s;
+                text-shadow:2px 2px black;
             }
 // the spaceship
             .game-spaceship {
@@ -258,17 +384,22 @@ body {
                 transform: translateY(400%);
                 transition-property: transform;
                 transition-duration: 1s;
+                &.clicked {
+                    svg {
+                        animation-name: svgClicked;
+                        animation-duration: 0.1s;
+                    }
+                }
 
 
                 svg {
                     width: calc(100%/2);
                     height: auto;
                     cursor: pointer;
+
+
                     will-change:transform;
-                    &.clicked {
-                        animation-name: svgClicked;
-                        animation-duration: 0.1s;
-                    }
+
 
                 }
 
@@ -282,6 +413,9 @@ body {
                     color: #ececec;
                     height: 100px;
                     width: auto;
+                    text-shadow:2px 2px black;
+                    pointer-events: none;
+                    min-width: 400px;
 
 
 
@@ -296,14 +430,14 @@ body {
 
                         .game-data-stroke {
                             width: 130px;
-                            height: 2px;
+                            height: 3px;
                         }
                     }
                     &.game-data-temp {
                             flex-direction: row;
                         .game-data-stroke {
                             width: 30px;
-                            height: 2px;
+                            height: 3px;
                         }
                     }
 
@@ -312,9 +446,14 @@ body {
 
                         .game-data-stroke {
                             width: 120px;
-                            height: 5px;
+                            height: 3px;
                         }
                         .game-data-info {
+                            .unit-per-nb {
+                                &.decrease {
+                                    color: red;
+                                }
+                            }
                             .unit-loose-nb {
                                 display: block;
                                 font-size: 15px;
@@ -356,7 +495,7 @@ body {
                         flex-direction: row;
                         .game-data-stroke {
                             width: 65px;
-                            height: 2px;
+
                         }
                     }
 
@@ -367,8 +506,9 @@ body {
                         transition-property: transform;
                         transition-duration: 0.3s;
                         transition-delay: 0.8s;
-                        height: 5px;
+                        height: 3px;
                         background: #ececec;
+
                     }
 
 // general properties to infos
@@ -452,6 +592,22 @@ body {
                                     }
 
 
+                            }
+
+                            }
+                            &.goFull {
+                                &.unit-new-value {
+                                &::after {
+                                    display: block;
+                                    content: " ";
+                                    font-size: 15px;
+                                    position: absolute;
+                                    top: 0px;
+                                    right: 0% !important;
+                                    font-family: "FontAwesome", "Nova Mono";
+                                    width: 120px;
+                                    text-align: left;
+                                }
                             }
                             }
                             &.armor {
@@ -583,6 +739,12 @@ body {
                 }
 // properties to lvl-1
                 &.spaceship-lvl-1 {
+                    .svg-container {
+                        display: none;
+                        &:nth-of-type(1) {
+                            display: block;
+                        }
+                    }
                     .game-data-speed {
                         top: -15px;
                         right: 65%;
@@ -608,10 +770,299 @@ body {
                         left: 65%;
                     }
                 }
+                &.spaceship-lvl-2 {
+                    .svg-container {
+                        display: none;
+                        &:nth-of-type(2) {
+                            display: block;
+                        }
+                    }
+                    .game-data-speed {
+                        top: -15px;
+                        right: 50%;
+                    }
+                    .game-data-temp {
+                        top: 80px;
+                        left: 65%;
+                    }
+                    .game-data-tank {
+                        top: 100px;
+                        right: 50%;
+                    }
+                    .game-data-radar {
+                        top: 40px;
+                        right: 55%;
+                    }
+                    .game-data-armor {
+                        top: -35px;
+                        left: 50%;
+                    }
+                    .game-data-money {
+                        top: 30px;
+                        left: 60%;
+                    }
+                }
+                &.spaceship-lvl-3 {
+                    .svg-container {
+                        display: none;
+                        &:nth-of-type(3) {
+                            display: block;
+                        }
+                    }
+                    .game-data-speed {
+                        top: -15px;
+                        right: 55%;
+                    }
+                    .game-data-temp {
+                        top: 80px;
+                        left: 55%;
+                    }
+                    .game-data-tank {
+                        top: 70px;
+                        right: 50%;
+                    }
+                    .game-data-radar {
+                        top: 25px;
+                        right: 65%;
+                    }
+                    .game-data-armor {
+                        top: -35px;
+                        left: 50%;
+                    }
+                    .game-data-money {
+                        top: 30px;
+                        left: 65%;
+                    }
+                }
+                &.spaceship-lvl-4 {
+                    .svg-container {
+                        display: none;
+                        &:nth-of-type(4) {
+                            display: block;
+                        }
+                    }
+                    .game-data-speed {
+                        top: 5px;
+                        right: 55%;
+                    }
+                    .game-data-temp {
+                        top: 180px;
+                        left: 70%;
+                    }
+                    .game-data-tank {
+                        top: 150px;
+                        right: 50%;
+                    }
+                    .game-data-radar {
+                        top: 65px;
+                        right: 60%;
+                    }
+                    .game-data-armor {
+                        top: -35px;
+                        left: 50%;
+                    }
+                    .game-data-money {
+                        top: 30px;
+                        left: 55%;
+                    }
+                }
+                &.spaceship-lvl-5 {
+                    .svg-container {
+                        display: none;
+                        &:nth-of-type(5) {
+                            display: block;
+                        }
+                    }
+                    .game-data-speed {
+                        top: 5px;
+                        right: 55%;
+                    }
+                    .game-data-temp {
+                        top: 100px;
+                        left: 70%;
+                    }
+                    .game-data-tank {
+                        top: 130px;
+                        right: 70%;
+                    }
+                    .game-data-radar {
+                        top: 65px;
+                        right: 60%;
+                    }
+                    .game-data-armor {
+                        top: -35px;
+                        left: 50%;
+                    }
+                    .game-data-money {
+                        top: 30px;
+                        left: 55%;
+                    }
+                }
+                &.spaceship-lvl-6 {
+                    .svg-container {
+                        display: none;
+                        &:nth-of-type(6) {
+                            display: block;
+                        }
+                    }
+                    .game-data-speed {
+                        top: 5px;
+                        right: 55%;
+                    }
+                    .game-data-temp {
+                        top: 120px;
+                        left: 70%;
+                    }
+                    .game-data-tank {
+                        top: 130px;
+                        right: 70%;
+                    }
+                    .game-data-radar {
+                        top: 65px;
+                        right: 60%;
+                    }
+                    .game-data-armor {
+                        top: -35px;
+                        left: 50%;
+                    }
+                    .game-data-money {
+                        top: 30px;
+                        left: 55%;
+                    }
+                }
+                &.spaceship-lvl-7 {
+                    .svg-container {
+                        display: none;
+                        &:nth-of-type(7) {
+                            display: block;
+                        }
+                    }
+                    .game-data-speed {
+                        top: 5px;
+                        right: 55%;
+                    }
+                    .game-data-temp {
+                        top: 120px;
+                        left: 70%;
+                    }
+                    .game-data-tank {
+                        top: 130px;
+                        right: 70%;
+                    }
+                    .game-data-radar {
+                        top: 65px;
+                        right: 60%;
+                    }
+                    .game-data-armor {
+                        top: -35px;
+                        left: 50%;
+                    }
+                    .game-data-money {
+                        top: 30px;
+                        left: 55%;
+                    }
+                }
+                &.spaceship-lvl-8 {
+                    .svg-container {
+                        display: none;
+                        &:nth-of-type(8) {
+                            display: block;
+                        }
+                    }
+                    .game-data-speed {
+                        top: 5px;
+                        right: 55%;
+                    }
+                    .game-data-temp {
+                        top: 120px;
+                        left: 65%;
+                    }
+                    .game-data-tank {
+                        top: 170px;
+                        right: 65%;
+                    }
+                    .game-data-radar {
+                        top: 65px;
+                        right: 60%;
+                    }
+                    .game-data-armor {
+                        top: -35px;
+                        left: 50%;
+                    }
+                    .game-data-money {
+                        top: 30px;
+                        left: 55%;
+                    }
+                }
+                &.spaceship-lvl-9 {
+                    .svg-container {
+                        display: none;
+                        &:nth-of-type(9) {
+                            display: block;
+                        }
+                    }
+                    .game-data-speed {
+                        top: 5px;
+                        right: 55%;
+                    }
+                    .game-data-temp {
+                        top: 120px;
+                        left: 70%;
+                    }
+                    .game-data-tank {
+                        top: 130px;
+                        right: 70%;
+                    }
+                    .game-data-radar {
+                        top: 65px;
+                        right: 60%;
+                    }
+                    .game-data-armor {
+                        top: -35px;
+                        left: 50%;
+                    }
+                    .game-data-money {
+                        top: 30px;
+                        left: 55%;
+                    }
+                }
+                &.spaceship-lvl-10 {
+                    .svg-container {
+                        display: none;
+                        &:nth-of-type(10) {
+                            display: block;
+                        }
+                    }
+                    .game-data-speed {
+                        top: 5px;
+                        right: 55%;
+                    }
+                    .game-data-temp {
+                        top: 120px;
+                        left: 70%;
+                    }
+                    .game-data-tank {
+                        top: 130px;
+                        right: 70%;
+                    }
+                    .game-data-radar {
+                        top: 65px;
+                        right: 60%;
+                    }
+                    .game-data-armor {
+                        top: -35px;
+                        left: 50%;
+                    }
+                    .game-data-money {
+                        top: 30px;
+                        left: 55%;
+                    }
+                }
+
             }
 // total of data
             .game-total-data {
-                margin-top: 100px;
+                margin-top: 50px;
                 text-align: center;
                 font-size: 35px;
                 color: white;
@@ -621,6 +1072,7 @@ body {
                 transition-duration: 0.5s;
                 transition-delay: 1s;
                 opacity: 0;
+                text-shadow:2px 2px black;
                 span:first-child {
                     font-weight: bolder;
                     font-size: 45px;
@@ -630,7 +1082,7 @@ body {
                 }
             }
             .game-stars-shop {
-                margin-top: 100px;
+                margin-top: 50px;
                 text-align: center;
                 font-size: 35px;
                 color: white;
@@ -641,6 +1093,7 @@ body {
                 transition-delay: 1s;
                 opacity: 0;
                 display: none;
+                text-shadow:2px 2px black;
                 span:first-child {
                     font-weight: bolder;
                     font-size: 45px;
@@ -655,6 +1108,87 @@ body {
                     color: red;
                 }
             }
+            }
+            .game-bonus {
+                position: absolute;
+                bottom:80px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 300px;
+                height: 70px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                cursor: pointer;
+                will-change:opacity;
+                opacity: 0;
+                transition-delay: 0.5s;
+                transition-duration: 0.5s;
+                .game-bonus-item {
+                    width: 60px;
+                    height: 60px;
+                    background: #e74c3c;
+                    border-radius: 60px;
+                    position: relative;
+                    text-align: center;
+                    border: 2px solid  #e74c3c;
+                    display: none;
+                    &.available {
+                        display: block;
+                    }
+                    i {
+                        line-height: 60px;
+                        color: white;
+                        font-size: 20px;
+                    }
+                    &.autopilot {
+                        &.active {
+                            border: 2px solid white;
+                        }
+                    }
+                    &.hyperboost {
+                        &.active {
+                            border: 2px solid white;
+                        }
+                    }
+                    .game-bonus-item-details {
+                        width: 150px;
+                        height: 30px;
+                        background: #e74c3c;
+                        position: absolute;
+                        bottom: -40px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        display: none;
+                        border-radius: 5px;
+                        text-align: center;
+
+                        span {
+                            color: white;
+                            font-family: "Nova Mono", sans-serif;
+                            line-height: 30px;
+                        }
+                        &:after {
+                            content: "";
+                            display: block;
+                            width: 20px;
+                            height: 20px;
+                            background-color: inherit;
+                            position: absolute;
+                            top: -5px;
+                            left: 50%;
+                            z-index: -1;
+                            transform: translateX(-50%) rotate(45deg);
+
+                        }
+                    }
+                    &:hover {
+                        .game-bonus-item-details {
+                        display: block;
+                    }
+                    }
+                }
             }
 
 // when I click on .ld-start-button and I add .launched to .game
@@ -677,6 +1211,9 @@ body {
 
                 }
                 .game-total-data {
+                    opacity: 1;
+                }
+                .game-bonus {
                     opacity: 1;
                 }
             }
@@ -704,6 +1241,9 @@ body {
                 .game-total-data {
                     opacity: 0;
                     transition-delay: 0.3s
+                }
+                .game-bonus {
+                    opacity: 0;
                 }
             }
             &.changingGalaxy-2 {
@@ -746,6 +1286,7 @@ body {
                 opacity: 1;
 
             }
+
         }
 
         }
@@ -790,4 +1331,36 @@ body {
     100% {
         transform: scale(1.2);
     }
+}
+@keyframes rotateSolar {
+    100% {
+        transform: rotate(360deg) scale(1.2);
+    }
+}
+@keyframes translateAsteroids {
+0% {
+    background-position-y: 0px;
+}
+50% {
+    background-position-y: 10px;
+}
+100% {
+    background-position-y: 0px;
+}
+
+}
+@keyframes windTranslate {
+0% {
+    background-position-x: -20px;
+    transform: scale(1)
+}
+50% {
+    background-position-x: -100px;
+    transform: scale(0.9)
+}
+100% {
+    background-position-x: -20px;
+    transform: scale(1)
+}
+
 }
