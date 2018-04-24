@@ -56,7 +56,7 @@ gulp.task("cleanDist", function() {
 })
 
 // distribution folder where everything is minified
-gulp.task("dist", ["cleanDist", "dist-concatFiles", "dist-css", "dist-js"], function() {
+gulp.task("dist", ["cleanDist", "dist-concatFiles", "dist-css", "dist-js", "dist-images", "dist-fonts"], function() {
     gulp.src("./dist")
   .pipe(gulp_notify("Dist folder has been created"));
 })
@@ -90,6 +90,18 @@ gulp.task("dist-js", ["dist-concatFiles"], function() {
         .pipe(gulp_uglify())
         .pipe(gulp.dest('./dist/assets/scripts'));
 
+})
+
+gulp.task("dist-images", ["dist-concatFiles"], function() {
+
+    return gulp.src('./assets/images/**/**.**')
+        .pipe(gulp.dest('./dist/assets/images'));
+})
+
+gulp.task("dist-fonts", ["dist-concatFiles"], function() {
+
+    return gulp.src('./assets/fonts/**/**.**')
+        .pipe(gulp.dest('./dist/assets/fonts'));
 })
 
 
